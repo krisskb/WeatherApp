@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+ 	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<style>
+body {
+ 
+	padding-top: 70px;
+	color:#000000;
+    background-size:     cover;                    
+    background-repeat:   no-repeat;
+    background-position: center center;
+
+}
+#unit {
+	font-size:20px;
+	cursor: pointer;
+	cursor: hand;
+	color: blue;
+}
+#icon {
+	transform: scale(2);
+}
+#time {
+	font-size: 10px;
+}
+h1 {
+  color:#000060;
+}
+#weatherdata {
+  border-radius:100%;
+}
+</style>
+<script>
+$(document).ready(function() {
+	var lon=0;
+	var lat=0;
+	var url = "";
+	var ctemp = 0;
+	navigator.geolocation.getCurrentPosition(foundLocation, noLocation);
+	function foundLocation(position) {
+		lat = position.coords.latitude;
+        lon = position.coords.longitude;
+		var openwturl="http://api.openweathermap.org/data/2.5/weather?lat=17.3858&lon=78.4807&units=metric&APPID=11caf58603d30b0b28a893215a73249f";
+		wurl = "http://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&units=metric&APPID=11caf58603d30b0b28a893215a73249f" ;
+		$.getJSON(wurl, function(json) {
+			var html=""
+			$("#weather").html(json.weather[0].main);
+			$("#temp").html(json.main.temp);
+			ctemp=json.main.temp;
+			$("#time").html(Date());
+			$("#city").html(json.name);
+			$("img").attr("src","http://openweathermap.org/img/w/"+json.weather[0].icon+".png");
+			$("#unit").click(function(){
+				if ($("#unit").text().charCodeAt(0) == 8451){
+					$("#unit").text(String.fromCharCode(8457));
+					$("#temp").html(( ( ctemp * 9/5 ) + 32).toFixed(2));
+				} else { $("#unit").text(String.fromCharCode(8451)); 
+					$("#temp").html(ctemp);
+				}
+			}); 
+			switch (json.weather[0].icon) {
+				case "11d":
+				case "11n":
+					$("body").css("background-image",'url("https://raw.githubusercontent.com/krisskb/WeatherApp/master/Background%20images/drizzle.jpg")');
+					break;  
+				case "09d":
+				case "09n":
+					$("body").css("background-image",'url("https://raw.githubusercontent.com/krisskb/WeatherApp/master/Background%20images/drizzle.jpg")'); 
+					break;
+				case "10d":
+				case "10n":
+					$("body").css("background-image",'url("https://raw.githubusercontent.com/krisskb/WeatherApp/master/Background%20images/rain.jpg")');
+					break;
+				case "13d":
+				case "13n":
+					$("body").css("background-image",'url("https://raw.githubusercontent.com/krisskb/WeatherApp/master/Background%20images/snow.jpg")');
+					break;
+				case "02n":
+				case "03n":
+				case "04n":
+					$("body").css("background-image",'url("https://raw.githubusercontent.com/krisskb/WeatherApp/master/Background%20images/cloud-night.jpg")');
+					break;
+				case "02d":
+					$("body").css("background-image",'url("https://raw.githubusercontent.com/krisskb/WeatherApp/master/Background%20images/cloud.jpg")');
+					break;
+				case "03d":
+					$("body").css("background-image",'url("https://raw.githubusercontent.com/krisskb/WeatherApp/master/Background%20images/cloud2.jpg")');
+					break;
+				case "04d":
+					$("body").css("background-image",'url("https://raw.githubusercontent.com/krisskb/WeatherApp/master/Background%20images/cloud3.jpg")');
+					break;
+				case "01d":
+				case "01n":
+					$("body").css("background-image",'url("https://raw.githubusercontent.com/krisskb/WeatherApp/master/Background%20images/calm.jpg")');
+					break;
+				case "50d":
+				case "50n":
+					$("body").css("background-image",'url("https://raw.githubusercontent.com/krisskb/WeatherApp/master/Background%20images/Haze.jpg")');
+					break;
+				default:
+					$("body").css("background-image",'url("https://raw.githubusercontent.com/krisskb/WeatherApp/master/Background%20images/atmosphere.jpg")');
+			} 
+		});
+        }
+	function noLocation() {
+        alert('Could not find location');
+		}
+  });
+</script>
+</head>
+<body>
+
+<div class="container-fluid">
+ <div class = "row text-center">
+    <h1>Weather App</h1>
+    <div class = "col-md-2 col-md-offset-5 ">
+      <div id="weatherdata" class="well">
+        <h3 id="city"><h3>
+          <p id="time"></p>
+          <p><span id="temp"></span> <span id="unit">&#8451;</span></p>
+          <p id="weather"></p>
+          <img src="#" id="icon"/>
+      </div>
+	      <p>Created by Krishna</p>
+    </div>
+
+
+  </div>
+</div>
+
+</body>
+</html>
